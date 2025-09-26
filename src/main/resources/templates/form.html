@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title th:unless="${manutencao.id}">Nova Solicitação</title>
+  <title th:if="${manutencao.id}">Editar Solicitação</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    /* Paleta verde escuro e branco */
+    body {
+      background-color: #e6f0ea; /* verde bem claro de fundo */
+      color: #006400; /* texto principal verde escuro */
+    }
+
+    .navbar {
+      background-color: #006400; /* navbar verde escuro */
+    }
+
+    .navbar .navbar-brand {
+      color: #ffffff !important;
+    }
+
+    h1 {
+      color: #006400; /* título verde escuro */
+    }
+
+    .btn-save {
+      background-color: #006400;
+      border-color: #004d00;
+      color: #ffffff;
+    }
+
+    .btn-save:hover {
+      background-color: #004d00;
+      border-color: #003300;
+      color: #ffffff;
+    }
+
+    .btn-cancel {
+      background-color: #ffffff;
+      border-color: #006400;
+      color: #006400;
+    }
+
+    .btn-cancel:hover {
+      background-color: #f0f0f0;
+      color: #004d00;
+    }
+
+    .text-danger {
+      color: #b30000; /* erros em vermelho escuro */
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar border-bottom border-body">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/manutencoes}">Sistema de Manutenção</a>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <h1 th:unless="${manutencao.id}">Nova Solicitação</h1>
+    <h1 th:if="${manutencao.id}">Editar Solicitação</h1>
+
+    <form method="post" th:object="${manutencao}">
+      <div class="mb-3">
+        <label for="solicitante" class="form-label">Solicitante</label>
+        <input type="text" class="form-control" id="solicitante" th:field="*{solicitante}"/>
+        <ul>
+          <li th:each="error : ${#fields.errors('solicitante')}" th:text="${error}" class="text-danger"></li>
+        </ul>
+      </div>
+
+      <div class="mb-3">
+        <label for="item" class="form-label">Item</label>
+        <input type="text" class="form-control" id="item" th:field="*{item}"/>
+        <ul>
+          <li th:each="error : ${#fields.errors('item')}" th:text="${error}" class="text-danger"></li>
+        </ul>
+      </div>
+
+      <div class="mb-3">
+        <label for="descricaoProblema" class="form-label">Descrição do Problema</label>
+        <textarea class="form-control" id="descricaoProblema" rows="3" th:field="*{descricaoProblema}"></textarea>
+        <ul>
+          <li th:each="error : ${#fields.errors('descricaoProblema')}" th:text="${error}" class="text-danger"></li>
+        </ul>
+      </div>
+
+      <button type="submit" class="btn btn-save">Salvar</button>
+      <a th:href="@{/manutencoes}" class="btn btn-cancel">Cancelar</a>
+    </form>
+  </main>
+</body>
+</html>

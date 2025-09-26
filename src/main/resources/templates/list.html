@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Sistema de Manutenção</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <style>
+    /* Paleta verde escuro e branco */
+    body {
+      background-color: #e6f0ea; /* verde claro de fundo */
+      color: #006400; /* texto principal verde escuro */
+    }
+
+    .navbar {
+      background-color: #006400; /* navbar verde escuro */
+    }
+
+    .navbar .navbar-brand {
+      color: #ffffff !important;
+    }
+
+    h1 {
+      color: #006400;
+    }
+
+    .btn-new {
+      background-color: #006400;
+      border-color: #004d00;
+      color: #ffffff;
+    }
+
+    .btn-new:hover {
+      background-color: #004d00;
+      border-color: #003300;
+      color: #ffffff;
+    }
+
+    .btn-edit {
+      background-color: #ffffff;
+      border-color: #006400;
+      color: #006400;
+    }
+
+    .btn-edit:hover {
+      background-color: #f0f0f0;
+      color: #004d00;
+    }
+
+    .btn-finish {
+      background-color: #006400;
+      border-color: #004d00;
+      color: #ffffff;
+    }
+
+    .btn-finish:disabled {
+      background-color: #b3b3b3;
+      border-color: #999999;
+      color: #666666;
+    }
+
+    .btn-delete {
+      background-color: #b30000;
+      border-color: #800000;
+      color: #ffffff;
+    }
+
+    .btn-delete:hover {
+      background-color: #800000;
+      border-color: #4d0000;
+      color: #ffffff;
+    }
+
+    table th {
+      background-color: #006400;
+      color: #ffffff;
+    }
+
+    table td {
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar border-bottom border-body">
+    <div class="container-fluid">
+      <a class="navbar-brand" th:href="@{/manutencoes}">Sistema de Manutenção</a>
+    </div>
+  </nav>
+
+  <main class="container mt-4">
+    <h1>Solicitações de Manutenção</h1>
+
+    <table class="table table-striped" th:unless="${#lists.isEmpty(manutencoes)}">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Solicitante</th>
+          <th>Item</th>
+          <th>Descrição</th>
+          <th>Data Solicitação</th>
+          <th>Data Conclusão</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="m : ${manutencoes}">
+          <td th:text="${m.id}">---</td>
+          <td th:text="${m.solicitante}">---</td>
+          <td th:text="${m.item}">---</td>
+          <td th:text="${m.descricaoProblema}">---</td>
+          <td th:text="${#temporals.format(m.dataHoraSolicitacao, 'dd/MM/yyyy HH:mm')}">---</td>
+          <td th:text="${m.dataHoraConclusao != null ? #temporals.format(m.dataHoraConclusao, 'dd/MM/yyyy HH:mm') : '-'}">---</td>
+          <td>
+            <form class="d-inline" th:action="@{/manutencoes/finish/{id}(id=${m.id})}" method="post">
+              <button type="submit" class="btn btn-sm btn-finish"
+                th:classappend="${m.dataHoraConclusao} ? ' disabled' : ''">Finalizar</button>
+            </form>
+
+            <a th:href="@{/manutencoes/edit/{id}(id=${m.id})}" class="btn btn-sm btn-edit"
+               th:classappend="${m.dataHoraConclusao} ? ' disabled' : ''">Editar</a>
+
+            <a th:href="@{/manutencoes/delete/{id}(id=${m.id})}" class="btn btn-sm btn-delete">Excluir</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p th:if="${#lists.isEmpty(manutencoes)}">Nenhuma solicitação cadastrada.</p>
+
+    <a th:href="@{/manutencoes/create}" class="btn btn-new mt-3">Nova Solicitação</a>
+  </main>
+</body>
+</html>
